@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Do You Feel?</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; padding: 20px; background-color: #f5f5f5; }
+        .feeling-button { 
+            display: inline-block; 
+            margin: 10px; 
+            cursor: pointer; 
+            border: none; 
+            background: none; 
+        }
+        .feeling-button img { width: 80px; height: 80px; display: block; margin: 0 auto; }
+        .feeling-button span { display: block; font-size: 18px; margin-top: 5px; }
+
+        #feelingTitle, #feelingImage, #showQuoteBtn, #quote, #quoteImage, audio { display: none; }
+        #feelingImage, #quoteImage { width: 300px; height: auto; margin-top: 20px; }
+        #quote { font-size: 20px; font-weight: bold; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <h1>Select Your Feeling</h1>
+
+    <button class="feeling-button" onclick="selectFeeling('happy')">
+        <img src="https://yourimageurl.com/happy-icon.png" alt="Happy">
+        <span>Happy</span>
+    </button>
+
+    <button class="feeling-button" onclick="selectFeeling('angry')">
+        <img src="https://yourimageurl.com/angry-icon.png" alt="Angry">
+        <span>Angry</span>
+    </button>
+
+    <button class="feeling-button" onclick="selectFeeling('sad')">
+        <img src="https://yourimageurl.com/sad-icon.png" alt="Sad">
+        <span>Sad</span>
+    </button>
+
+    <button class="feeling-button" onclick="selectFeeling('unmotivated')">
+        <img src="https://yourimageurl.com/unmotivated-icon.png" alt="Unmotivated">
+        <span>Unmotivated</span>
+    </button>
+
+    <button class="feeling-button" onclick="selectFeeling('tired')">
+        <img src="https://yourimageurl.com/tired-icon.png" alt="Tired">
+        <span>Tired</span>
+    </button>
+
+    <h2 id="feelingTitle"></h2>
+    <img id="feelingImage" src="" alt="">
+    <button id="showQuoteBtn" onclick="showQuote()">Show Quote</button>
+
+    <h2 id="quote"></h2>
+    <img id="quoteImage" src="" alt="">
+
+    <audio id="feelingMusic" controls></audio>
+
+    <script>
+        const feelings = {
+            happy: { 
+                img: "https://yourimageurl.com/happy-feeling.jpg", 
+                music: "https://yourmusicurl.com/happy.mp3",
+                quotes: [
+                    { text: "Happiness is a journey, not a destination.", img: "https://yourimageurl.com/happy1.jpg" },
+                    { text: "Smile, it makes everything better!", img: "https://yourimageurl.com/happy2.jpg" },
+                    { text: "Joy is contagious, spread it everywhere!", img: "https://yourimageurl.com/happy3.jpg" }
+                ]
+            },
+            angry: { 
+                img: "https://yourimageurl.com/angry-feeling.jpg", 
+                music: "https://yourmusicurl.com/angry.mp3",
+                quotes: [
+                    { text: "Breathe in, breathe out. Let it go.", img: "https://yourimageurl.com/angry1.jpg" },
+                    { text: "Anger doesn't solve problems, calm does.", img: "https://yourimageurl.com/angry2.jpg" },
+                    { text: "Turn anger into strength, not stress.", img: "https://yourimageurl.com/angry3.jpg" }
+                ]
+            },
+            sad: { 
+                img: "https://yourimageurl.com/sad-feeling.jpg", 
+                music: "https://yourmusicurl.com/sad.mp3",
+                quotes: [
+                    { text: "It's okay to not be okay.", img: "https://yourimageurl.com/sad1.jpg" },
+                    { text: "Tears are proof of strength, not weakness.", img: "https://yourimageurl.com/sad2.jpg" },
+                    { text: "Every storm passes, just hold on.", img: "https://yourimageurl.com/sad3.jpg" }
+                ]
+            },
+            unmotivated: { 
+                img: "https://yourimageurl.com/unmotivated-feeling.jpg", 
+                music: "https://yourmusicurl.com/unmotivated.mp3",
+                quotes: [
+                    { text: "You are capable of amazing things.", img: "https://yourimageurl.com/unmotivated1.jpg" },
+                    { text: "Small steps still move you forward.", img: "https://yourimageurl.com/unmotivated2.jpg" },
+                    { text: "Success starts with showing up.", img: "https://yourimageurl.com/unmotivated3.jpg" }
+                ]
+            },
+            tired: { 
+                img: "https://yourimageurl.com/tired-feeling.jpg", 
+                music: "https://yourmusicurl.com/tired.mp3",
+                quotes: [
+                    { text: "Rest is not a weakness, it's a necessity.", img: "https://yourimageurl.com/tired1.jpg" },
+                    { text: "Breathe, relax, recharge. You deserve it.", img: "https://yourimageurl.com/tired2.jpg" },
+                    { text: "Even the sun takes a break.", img: "https://yourimageurl.com/tired3.jpg" }
+                ]
+            }
+        };
+
+        function selectFeeling(feeling) {
+            document.getElementById("feelingTitle").innerText = feeling.charAt(0).toUpperCase() + feeling.slice(1);
+            document.getElementById("feelingImage").src = feelings[feeling].img;
+            document.getElementById("feelingImage").style.display = "block";
+            document.getElementById("showQuoteBtn").style.display = "block";
+            document.getElementById("quote").style.display = "none";
+            document.getElementById("quoteImage").style.display = "none";
+
+            let music = document.getElementById("feelingMusic");
+            music.src = feelings[feeling].music;
+            music.play();
+
+            sessionStorage.setItem("currentFeeling", feeling);
+        }
+
+        function showQuote() {
+            let feeling = sessionStorage.getItem("currentFeeling");
+            if (!feeling) return;
+
+            let quotes = feelings[feeling].quotes;
+            let randomIndex = Math.floor(Math.random() * quotes.length);
+            let selectedQuote = quotes[randomIndex];
+
+            document.getElementById("quote").innerText = selectedQuote.text;
+            document.getElementById("quoteImage").src = selectedQuote.img;
+            document.getElementById("quote").style.display = "block";
+            document.getElementById("quoteImage").style.display = "block";
+        }
+    </script>
+
+</body>
+</html>
